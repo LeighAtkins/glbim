@@ -3,9 +3,15 @@
   "files": [
     "./demo/**/*.{html,css,js,json,wasm,glb}"
   ],
-  "server": { 
+  "server": {
     "baseDir": "./demo",
     "index": "./index.html"
   },
-  "open": false
+  "open": false,
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "types": [
+      "dom"
+    ]
+  }
 }

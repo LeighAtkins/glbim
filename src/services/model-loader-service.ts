@@ -1,9 +1,9 @@
 import { Observable, Subject, BehaviorSubject, AsyncSubject, firstValueFrom } from "rxjs";
 
 import { Mesh, BufferGeometry, Matrix4, Object3D, Scene } from "three";
-// eslint-disable-next-line import/named
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+// Import directly from Three.js with .js extensions
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 
 import { ModelLoadedInfo, ModelLoadingInfo, ModelOpenedInfo, LoadingQueueInfo,
   ModelGeometryInfo, ModelFileInfo, Mesh_BG, Vec4DoubleCS} from "../common-types";
@@ -110,7 +110,9 @@ export class ModelLoaderService {
       x.material.dispose();
     });
     
-    this._glbLoader.dracoLoader?.dispose();  
+    if (this._glbLoader && this._glbLoader.dracoLoader) {
+      this._glbLoader.dracoLoader.dispose();
+    }
     this._glbLoader = null;
   }
 

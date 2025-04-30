@@ -7,7 +7,7 @@
   "scripts": {
     "buildts": "tsc",
     "buildru": "rollup -c",
-    "copydraco": "copyfiles -f ./node_modules/three/examples/js/libs/draco/* ./demo/assets/draco",
+    "copydraco": "copyfiles -f ./node_modules/three/examples/jsm/libs/draco/* ./demo/assets/draco",
     "copyifc": "copyfiles -f ./node_modules/web-ifc/*.wasm ./node_modules/web-ifc/*.md ./demo/assets/ifc",
     "build": "npm run buildts && npm run buildru && npm run copydraco && npm run copyifc",
     "start": "npm run build && lite-server -c ls-config.json",
@@ -38,9 +38,10 @@
   },
   "homepage": "https://github.com/yermolim/glbim#readme",
   "dependencies": {
-    "rxjs": "^7.4.0",
-    "three": "^0.135.0",
-    "web-ifc": "^0.0.32"
+    "rxjs": "^7.8.2",
+    "three": "^0.149.0",
+    "web-ifc": "^0.0.32",
+    "web-ifc-three": "^0.0.126"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
@@ -49,7 +50,7 @@
     "@rollup/plugin-replace": "^3.0.0",
     "@rollup/plugin-strip": "^2.1.0",
     "@rollup/plugin-typescript": "^8.3.0",
-    "@types/resize-observer-browser": "^0.1.6",
+    "@types/resize-observer-browser": "^0.1.11",
     "@types/three": "^0.135.0",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/eslint-plugin-tslint": "^5.8.0",
@@ -65,6 +66,6 @@
     "rollup-plugin-node-externals": "^3.1.2",
     "rollup-plugin-terser": "^7.0.2",
     "tslib": "^2.3.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.9.5"
   }
 }

@@ -24,14 +24,14 @@
 import { BehaviorSubject, Subject, AsyncSubject, firstValueFrom } from 'rxjs';
 import * as THREE from 'three';
 import { Matrix4, Scene, Mesh, BufferGeometry, MOUSE, TOUCH, Box3, Vector3, Euler, Quaternion, PerspectiveCamera, MeshStandardMaterial, MeshPhysicalMaterial, MeshBasicMaterial, MeshPhongMaterial, MeshLambertMaterial, MeshToonMaterial, SpriteMaterial, NormalBlending, DoubleSide, Color, NoBlending, LineBasicMaterial, CanvasTexture, Vector4, Object3D, Vector2, Raycaster, OrthographicCamera, Sprite, AmbientLight, HemisphereLight, DirectionalLight, InstancedBufferAttribute, TextureLoader, Uint32BufferAttribute, Uint8BufferAttribute, Float32BufferAttribute, InterleavedBufferAttribute, WebGLRenderer, sRGBEncoding, NoToneMapping, WebGLRenderTarget, Triangle } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import * as IFC from 'web-ifc';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry';
-import { Line2 } from 'three/examples/jsm/lines/Line2';
-import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
-import { ConvexHull } from 'three/examples/jsm/math/ConvexHull';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
+import { Line2 } from 'three/examples/jsm/lines/Line2.js';
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
+import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
 
 class GlbimOptions {
     constructor(item = null) {
@@ -90,18 +90,6 @@ class Vec4 {
     }
 }
 class Vec4DoubleCS {
-    constructor(isZup = false, x = 0, y = 0, z = 0, w = 0) {
-        this._x = x;
-        this._w = w;
-        if (isZup) {
-            this._y = z;
-            this._z = -y;
-        }
-        else {
-            this._y = y;
-            this._z = z;
-        }
-    }
     get x() {
         return this._x;
     }
@@ -119,6 +107,18 @@ class Vec4DoubleCS {
     }
     get z_Zup() {
         return this._y;
+    }
+    constructor(isZup = false, x = 0, y = 0, z = 0, w = 0) {
+        this._x = x;
+        this._w = w;
+        if (isZup) {
+            this._y = z;
+            this._z = -y;
+        }
+        else {
+            this._y = y;
+            this._z = z;
+        }
     }
     static fromVector3(vec, isZup = false) {
         return vec
@@ -299,6 +299,18 @@ var __awaiter$4 = (undefined && undefined.__awaiter) || function (thisArg, _argu
     });
 };
 class ModelLoaderService {
+    get loadedModelsArray() {
+        return this._loadedModelsArray;
+    }
+    get loadedMeshesArray() {
+        return this._loadedMeshesArray;
+    }
+    get openedModelInfos() {
+        return this._modelsOpenedChange.getValue();
+    }
+    get loadingInProgress() {
+        return this._loadingInProgress;
+    }
     constructor(dracoLibPath, ifcLibPath, basePoint = null) {
         this._loadingStateChange = new BehaviorSubject(false);
         this._loadingQueueChange = new BehaviorSubject(null);
@@ -344,20 +356,8 @@ class ModelLoaderService {
             this._ifcLoader = new IFCLoader(ifcLibPath);
         }
     }
-    get loadedModelsArray() {
-        return this._loadedModelsArray;
-    }
-    get loadedMeshesArray() {
-        return this._loadedMeshesArray;
-    }
-    get openedModelInfos() {
-        return this._modelsOpenedChange.getValue();
-    }
-    get loadingInProgress() {
-        return this._loadingInProgress;
-    }
     destroy() {
-        var _a, _b;
+        var _a;
         this._loadingStateChange.complete();
         this._modelLoadingStart.complete();
         this._modelLoadingProgress.complete();
@@ -367,7 +367,9 @@ class ModelLoaderService {
             x.geometry.dispose();
             x.material.dispose();
         });
-        (_b = this._glbLoader.dracoLoader) === null || _b === void 0 ? void 0 : _b.dispose();
+        if (this._glbLoader && this._glbLoader.dracoLoader) {
+            this._glbLoader.dracoLoader.dispose();
+        }
         this._glbLoader = null;
     }
     addQueueCallback(type, cb) {
@@ -656,6 +658,9 @@ class CameraControls extends OrbitControls {
 }
 
 class CameraService {
+    get camera() {
+        return this._camera;
+    }
     constructor(container, renderCallback) {
         this._focusBox = new Box3();
         this._rRadius = 0;
@@ -681,9 +686,6 @@ class CameraService {
         controls.update();
         this._camera = camera;
         this._controls = controls;
-    }
-    get camera() {
-        return this._camera;
     }
     destroy() {
         this._controls.dispose();
@@ -836,24 +838,6 @@ class CameraService {
 }
 
 class ColorRgbRmo {
-    constructor(r, g, b, roughness, metalness, opacity, byte = false) {
-        if (byte) {
-            this.r = r / 255;
-            this.g = g / 255;
-            this.b = b / 255;
-            this.roughness = roughness / 255;
-            this.metalness = metalness / 255;
-            this.opacity = opacity / 255;
-        }
-        else {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.roughness = roughness;
-            this.metalness = metalness;
-            this.opacity = opacity;
-        }
-    }
     get rByte() {
         return this.r * 255;
     }
@@ -871,6 +855,24 @@ class ColorRgbRmo {
     }
     get opacityByte() {
         return this.opacity * 255;
+    }
+    constructor(r, g, b, roughness, metalness, opacity, byte = false) {
+        if (byte) {
+            this.r = r / 255;
+            this.g = g / 255;
+            this.b = b / 255;
+            this.roughness = roughness / 255;
+            this.metalness = metalness / 255;
+            this.opacity = opacity / 255;
+        }
+        else {
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.roughness = roughness;
+            this.metalness = metalness;
+            this.opacity = opacity;
+        }
     }
     static createFromMaterial(material) {
         if (material instanceof MeshStandardMaterial
@@ -1176,6 +1178,24 @@ class CanvasTextureBuilder {
 }
 
 class Axes extends Object3D {
+    get size() {
+        return this._size;
+    }
+    set size(value) {
+        this.updateOptions(this.enabled, this._placement, value);
+    }
+    get placement() {
+        return this._placement;
+    }
+    set placement(value) {
+        this.updateOptions(this.enabled, value, this._size);
+    }
+    get enabled() {
+        return this._enabled;
+    }
+    set enabled(value) {
+        this.updateOptions(value, this._placement, this._size);
+    }
     constructor(container, axisClickedCallback, enabled = true, placement = "top-right", size = 128) {
         super();
         this._clickPoint = new Vector2();
@@ -1206,24 +1226,6 @@ class Axes extends Object3D {
         this._axisCLickedCallback = axisClickedCallback;
         this.initAxes();
         this.updateOptions(enabled, placement, size);
-    }
-    get size() {
-        return this._size;
-    }
-    set size(value) {
-        this.updateOptions(this.enabled, this._placement, value);
-    }
-    get placement() {
-        return this._placement;
-    }
-    set placement(value) {
-        this.updateOptions(this.enabled, value, this._size);
-    }
-    get enabled() {
-        return this._enabled;
-    }
-    set enabled(value) {
-        this.updateOptions(value, this._placement, this._size);
     }
     updateOptions(enabled, placement, size) {
         this._enabled = enabled;
@@ -1486,6 +1488,9 @@ class HudTool {
 }
 
 class HudInstancedMarker {
+    get object3d() {
+        return this._sprite;
+    }
     constructor(hudProjectionMatrix, hudResolution, texture, sizePx, spriteZIndex, cameraZIndex, keepVisible, maxInstances = 10000) {
         const material = MaterialBuilder.buildSpriteMaterial(texture);
         material.onBeforeCompile = shader => {
@@ -1570,9 +1575,6 @@ class HudInstancedMarker {
         sprite.position.set(0, 0, 0);
         this._sprite = sprite;
     }
-    get object3d() {
-        return this._sprite;
-    }
     update() {
     }
     destroy() {
@@ -1624,6 +1626,9 @@ class HudInstancedMarker {
 }
 
 class HudUniqueMarker {
+    get object3d() {
+        return this._sprite;
+    }
     constructor(hudProjectionMatrix, texture, sizePx, markerZIndex, cameraZIndex) {
         const material = MaterialBuilder.buildSpriteMaterial(texture);
         material.onBeforeCompile = shader => {
@@ -1665,9 +1670,6 @@ class HudUniqueMarker {
         sprite.position.set(0, 0, 0);
         sprite.frustumCulled = false;
         this._sprite = sprite;
-    }
-    get object3d() {
-        return this._sprite;
     }
     update() {
     }
@@ -1775,6 +1777,9 @@ class HudPointSnap extends HudTool {
 }
 
 class HudLineSegment {
+    get object3d() {
+        return this._segment;
+    }
     constructor(hudProjectionMatrix, hudResolution, color, width, zIndex, dashed = false) {
         this._hudResolution = hudResolution;
         const material = MaterialBuilder.buildLineMaterial(color, width, dashed);
@@ -1820,9 +1825,6 @@ class HudLineSegment {
         segment.frustumCulled = false;
         segment.visible = false;
         this._segment = segment;
-    }
-    get object3d() {
-        return this._segment;
     }
     update() {
         this._segment.material.resolution.copy(this._hudResolution);
@@ -2125,6 +2127,15 @@ class HudMarkers extends HudTool {
 }
 
 class HudScene {
+    get pointSnap() {
+        return this._pointSnap;
+    }
+    get distanceMeasurer() {
+        return this._distanceMeasurer;
+    }
+    get markers() {
+        return this._markers;
+    }
     constructor(markersTextureData) {
         this._cameraZ = 10;
         this._scene = new Scene();
@@ -2141,15 +2152,6 @@ class HudScene {
         this._pointSnap = new HudPointSnap(this._scene, this._hudResolution, this._hudProjectionMatrix, 9, this._cameraZ, 8);
         this._distanceMeasurer = new HudDistanceMeasurer(this._scene, this._hudResolution, this._hudProjectionMatrix, 8, this._cameraZ, 8);
         this._markers = new HudMarkers(this._scene, this._hudResolution, this._hudProjectionMatrix, 1, this._cameraZ, 24);
-    }
-    get pointSnap() {
-        return this._pointSnap;
-    }
-    get distanceMeasurer() {
-        return this._distanceMeasurer;
-    }
-    get markers() {
-        return this._markers;
     }
     destroy() {
         this._pointSnap.destroy();
@@ -2643,6 +2645,12 @@ var __awaiter$2 = (undefined && undefined.__awaiter) || function (thisArg, _argu
     });
 };
 class SimplifiedScene {
+    get scene() {
+        return this._scene;
+    }
+    get geometries() {
+        return this._geometries;
+    }
     constructor() {
         this._boxIndices = [
             0, 1, 3,
@@ -2660,12 +2668,6 @@ class SimplifiedScene {
         ];
         this._geometries = [];
         this._simpleMaterial = MaterialBuilder.buildPhongMaterial();
-    }
-    get scene() {
-        return this._scene;
-    }
-    get geometries() {
-        return this._geometries;
     }
     destroy() {
         var _a;
@@ -2853,6 +2855,21 @@ class SimplifiedScene {
 }
 
 class ScenesService {
+    get lights() {
+        return this._lights;
+    }
+    get axes() {
+        return this._axes;
+    }
+    get renderScene() {
+        return this._renderScene;
+    }
+    get simplifiedScene() {
+        return this._simplifiedScene;
+    }
+    get hudScene() {
+        return this._hudScene;
+    }
     constructor(container, cameraService, options) {
         if (!options) {
             throw new Error("Options is not defined");
@@ -2868,21 +2885,6 @@ class ScenesService {
         });
         this._simplifiedScene = new SimplifiedScene();
         this._hudScene = new HudScene(options.markersTextureData);
-    }
-    get lights() {
-        return this._lights;
-    }
-    get axes() {
-        return this._axes;
-    }
-    get renderScene() {
-        return this._renderScene;
-    }
-    get simplifiedScene() {
-        return this._simplifiedScene;
-    }
-    get hudScene() {
-        return this._hudScene;
     }
     destroy() {
         var _a, _b, _c, _d;
@@ -2907,6 +2909,18 @@ var __awaiter$1 = (undefined && undefined.__awaiter) || function (thisArg, _argu
     });
 };
 class RenderService {
+    set options(value) {
+        this._options = value;
+    }
+    get renderer() {
+        return this._renderer;
+    }
+    get canvas() {
+        return this._renderer.domElement;
+    }
+    get camera() {
+        return this._cameraService.camera;
+    }
     constructor(container, loaderService, cameraService, scenesService, options, lastFrameTimeSubject) {
         this._rendererEventListeners = new Map();
         this._meshesNeedColorUpdate = new Set();
@@ -2953,18 +2967,6 @@ class RenderService {
         this.resizeRenderer();
         this._cameraService.focusCameraOnObjects(null);
         this._container.append(this._renderer.domElement);
-    }
-    set options(value) {
-        this._options = value;
-    }
-    get renderer() {
-        return this._renderer;
-    }
-    get canvas() {
-        return this._renderer.domElement;
-    }
-    get camera() {
-        return this._cameraService.camera;
     }
     destroy() {
         this.removeAllRendererEventListeners();
@@ -3122,6 +3124,9 @@ class RenderService {
 }
 
 class PickingScene {
+    get scene() {
+        return this._scene;
+    }
     constructor() {
         this._materials = [];
         this._releasedMaterials = [];
@@ -3132,9 +3137,6 @@ class PickingScene {
         scene.background = new Color(0);
         this._scene = scene;
         this._target = new WebGLRenderTarget(1, 1);
-    }
-    get scene() {
-        return this._scene;
     }
     destroy() {
         this._materials.forEach(x => x.dispose());
@@ -3225,6 +3227,9 @@ class PickingScene {
 }
 
 class PickingService {
+    get scene() {
+        return this._pickingScene.scene;
+    }
     constructor(loaderService) {
         this.onLoaderMeshLoaded = (mesh) => {
             this.addMesh(mesh);
@@ -3240,9 +3245,6 @@ class PickingService {
         this._loaderService.addMeshCallback("mesh-unloaded", this.onLoaderMeshUnloaded);
         this._pickingScene = new PickingScene();
         this._raycaster = new Raycaster();
-    }
-    get scene() {
-        return this._pickingScene.scene;
     }
     destroy() {
         var _a;
@@ -3406,6 +3408,18 @@ class HighlightService {
 }
 
 class SelectionService {
+    set focusOnProgrammaticSelection(value) {
+        this._focusOnProgrammaticSelection = value;
+    }
+    get resetSelectionOnEmptySet() {
+        return this._resetSelectionOnEmptySet;
+    }
+    set resetSelectionOnEmptySet(value) {
+        this._resetSelectionOnEmptySet = value;
+    }
+    get selectedIds() {
+        return this._selectionChange.getValue();
+    }
     constructor(loaderService, pickingService) {
         this._selectionChange = new BehaviorSubject(new Set());
         this._manualSelectionChange = new Subject();
@@ -3428,18 +3442,6 @@ class SelectionService {
         this._loaderService.addModelCallback("model-unloaded", this.onLoaderModelUnloaded);
         this.selectionChange$ = this._selectionChange.asObservable();
         this.manualSelectionChange$ = this._manualSelectionChange.asObservable();
-    }
-    set focusOnProgrammaticSelection(value) {
-        this._focusOnProgrammaticSelection = value;
-    }
-    get resetSelectionOnEmptySet() {
-        return this._resetSelectionOnEmptySet;
-    }
-    set resetSelectionOnEmptySet(value) {
-        this._resetSelectionOnEmptySet = value;
-    }
-    get selectedIds() {
-        return this._selectionChange.getValue();
     }
     destroy() {
         this._selectionChange.complete();

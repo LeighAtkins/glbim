@@ -1,5 +1,5 @@
 import { Camera, MOUSE, TOUCH } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export class CameraControls extends OrbitControls {
   constructor(camera: Camera, domElement: HTMLElement) {

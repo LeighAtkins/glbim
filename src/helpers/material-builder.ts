@@ -1,7 +1,8 @@
 import { Color, DoubleSide, NormalBlending, NoBlending, 
   Texture, MeshStandardMaterial, MeshPhysicalMaterial, MeshPhongMaterial,
-  MeshBasicMaterial, LineBasicMaterial, SpriteMaterial } from "three";
-import { LineMaterial } from "three/examples/jsm/lines/LineMaterial";
+  MeshBasicMaterial, LineBasicMaterial, SpriteMaterial, MeshLambertMaterial, FrontSide, BackSide,
+  Vector2 } from "three";
+import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 
 import { ColorRgbRmo } from "../helpers/color-rgb-rmo";
 

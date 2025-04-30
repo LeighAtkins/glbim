@@ -1,8 +1,9 @@
 import { Vector2, Vector3, Matrix4, Object3D } from "three";
-import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
-import { Line2 } from "three/examples/jsm/lines/Line2";
+import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
+import { Line2 } from "three/examples/jsm/lines/Line2.js";
 import { MaterialBuilder } from "../../../helpers/material-builder";
 import { HudElement } from "./hud-element";
+import { Group } from "three";
 
 export class HudLineSegment implements HudElement {
   private _hudResolution: Vector2;

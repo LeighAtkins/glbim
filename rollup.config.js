@@ -10,11 +10,26 @@ export default [
   {
     input: "tsc/glbim-viewer.js",
     output: [
-      { file: "dist/glbim.esm.js", format: "esm"},
+      { 
+        file: "dist/glbim.esm.js", 
+        format: "esm",
+        inlineDynamicImports: true
+      },
       // TODO: configure terser to prevent imports from shadowing variables
       // { file: "dist/glbim.esm.min.js", format: "es", plugins: [terser()] },
     ],
-    external: [],
+    external: [
+      'three',
+      'three/examples/jsm/loaders/GLTFLoader.js',
+      'three/examples/jsm/loaders/DRACOLoader.js',
+      'three/examples/jsm/lines/Line2.js',
+      'three/examples/jsm/lines/LineGeometry.js',
+      'three/examples/jsm/lines/LineMaterial.js',
+      'three/examples/jsm/controls/OrbitControls.js',
+      'three/examples/jsm/math/ConvexHull.js',
+      'rxjs',
+      'rxjs/operators'
+    ],
     plugins: [
       license({
         banner: `   
@@ -44,6 +59,12 @@ export default [
         deps: true,
         devDeps: false,
       }),
+      nodeResolve({
+        browser: true,
+        extensions: ['.js', '.ts'],
+        preferBuiltins: false
+      }),
+      commonjs(),
     ]
   },
   {
@@ -59,11 +80,17 @@ export default [
   {
     input: "tsc/_demo/demo.js",
     output: [
-      { file: "demo/demo.js", format: "esm" },
+      { 
+        file: "demo/demo.js", 
+        format: "esm",
+        inlineDynamicImports: true
+      },
     ],
     plugins: [
       nodeResolve({
-        browser: true
+        browser: true,
+        extensions: ['.js', '.ts'],
+        preferBuiltins: false
       }),
       commonjs(),
     ],

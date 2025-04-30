@@ -1,6 +1,6 @@
 import { Light, Scene, Mesh, Box3, Vector3, BufferGeometry, BufferAttribute,
-  Uint32BufferAttribute, Float32BufferAttribute, MeshPhongMaterial } from "three";
-import { ConvexHull } from "three/examples/jsm/math/ConvexHull";
+  Uint32BufferAttribute, Float32BufferAttribute, MeshPhongMaterial, Group } from "three";
+import { ConvexHull } from "three/examples/jsm/math/ConvexHull.js";
 
 import { Mesh_BG, FastRenderType } from "../common-types";
 import { MaterialBuilder } from "../helpers/material-builder";

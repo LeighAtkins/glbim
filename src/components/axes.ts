@@ -1,8 +1,8 @@
 import { Object3D, Sprite, Vector2, Vector3, Vector4, Quaternion, Color,
   SpriteMaterial, WebGLRenderer, Camera, OrthographicCamera, Raycaster } from "three";
-import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
-import { LineMaterial } from "three/examples/jsm/lines/LineMaterial";
-import { Line2 } from "three/examples/jsm/lines/Line2";
+import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
+import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
+import { Line2 } from "three/examples/jsm/lines/Line2.js";
 
 import { MaterialBuilder } from "../helpers/material-builder";
 import { CanvasTextureBuilder } from "../helpers/canvas-texture-builder";

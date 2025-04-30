@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 
-declare type MeshMergeType = "scene" | "model" | "model+" | null;
-declare type FastRenderType = "ch" | "aabb" | "ombb" | null;
-declare type CornerName = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+type MeshMergeType = "scene" | "model" | "model+" | null;
+type FastRenderType = "ch" | "aabb" | "ombb" | null;
+type CornerName = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 interface ModelFileInfo {
     url: string;
     guid: string;
@@ -115,7 +115,7 @@ declare class GlbimOptions {
     constructor(item?: object);
 }
 
-declare type ViewerInteractionMode = "select_mesh" | "select_vertex" | "select_sprite" | "measure_distance";
+type ViewerInteractionMode = "select_mesh" | "select_vertex" | "select_sprite" | "measure_distance";
 declare class GlbimViewer {
     optionsChange$: Observable<GlbimOptions>;
     modeChange$: Observable<ViewerInteractionMode>;
